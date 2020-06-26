@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="/" >
+    <file>McMaster.png</file>
+    <file>logo.png</file>
+    <file>start.png</file>
+  </qresource>
+</RCC>

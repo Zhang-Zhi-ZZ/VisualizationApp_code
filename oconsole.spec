@@ -19,6 +19,7 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
+          Tree('C: C:\\Users\ZZ\\PycharmProjects\\visualizaton_app'),
           a.binaries,
           a.zipfiles,
           a.datas,

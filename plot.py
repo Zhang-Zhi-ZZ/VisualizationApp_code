@@ -1,48 +1,46 @@
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
-import pickle
-def plot():
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QColor, QBrush
+from PyQt5.QtCore import Qt
+from cc import Ui_widget
 
-    f = open("InputPoints_Example2.txt", "r")
-    x_axis = []
-    y_axis = []
-    z_axis = []
-    for i in f:
-        tmp = i.split()
-        x_axis.append(int(tmp[0]))
-        y_axis.append(int(tmp[1]))
-        z_axis.append(int(tmp[2]))
-    f.close()
 
-    f = open("InputEdges_Example2.txt", "r")
-    for i in f:
-        tmp = i.split()
-        start_index = int(tmp[0])
-        num_of_end_points = int(tmp[1])
-        for j in range(3,3+num_of_end_points):
-            line_x = []
-            line_y = []
-            line_z = []
-            end_index = int(tmp[j])
-            line_x.append(x_axis[start_index-1])
-            line_y.append(y_axis[start_index-1])
-            line_z.append(z_axis[start_index-1])
-            line_x.append(x_axis[end_index-1])
-            line_y.append(y_axis[end_index-1])
-            line_z.append(z_axis[end_index-1])
-            ax.plot3D(line_x, line_y, line_z, 'gray')
-    f.close()
+class MyMainForm(QMainWindow, Ui_widget):
+    def __init__(self, parent=None):
+        super(MyMainForm, self).__init__(parent)
+        self.setupUi(self)
+        #self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        #self.tableWidget.horizontalHeader().setVisible(False)
+        self.tableWidget.verticalHeader().setVisible(False)
+        font = self.tableWidget.horizontalHeader().font()
+        font.setBold(True)
+        self.tableWidget.horizontalHeader().setFont(font)
+        self.tableWidget.horizontalHeader().resizeSection(0,100)
+        self.tableWidget.horizontalHeader().resizeSection(1,100)
+        self.tableWidget.horizontalHeader().resizeSection(1,100)
+        self.tableWidget.horizontalHeader().resizeSection(3,400)
+        #self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    ax.scatter3D(x_axis, y_axis, z_axis, 'blue',marker = 'o')
+        items = [['燕十三','21','Male','武林大俠'],['蕭十一郎','21','Male','武功好']]
+        for i in range(len(items)):
+            each_item = items[i]
+            row = self.tableWidget.rowCount()
+            self.tableWidget.insertRow(row)
+            for j in range(len(each_item)):
+                item = QTableWidgetItem(str(items[i][j]))
+                if j != len(each_item) -1:
+                    item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    item.setForeground(QBrush(QColor(255,0,0)))
+                else:
+                    item.setBackground(QBrush(QColor(0,255,0)))
+                self.tableWidget.setItem(row,j,item)
 
-    #hide the axis
-    plt.axis('off')
+        self.tableWidget.setSpan(1,2,3,2)
 
-    plt.show()
-
-output = open('image.pickle', 'wb')
-pickle.dump(plot(),output)
-output.close()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    myWin = MyMainForm()
+    myWin.show()
+    sys.exit(app.exec_())
